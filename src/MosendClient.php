@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace Mosend;
 
 use Mosend\Http\HttpClient;
+use Mosend\Resources\BroadcastsResource;
+use Mosend\Resources\ContactListsResource;
+use Mosend\Resources\ContactsResource;
 use Mosend\Resources\ConversationsResource;
 use Mosend\Resources\HealthResource;
 use Mosend\Resources\MessagesResource;
+use Mosend\Resources\OptInsResource;
+use Mosend\Resources\QuickRepliesResource;
+use Mosend\Resources\ReactionsResource;
+use Mosend\Resources\TagsResource;
+use Mosend\Resources\TemplatesResource;
 
 /**
  * Cliente principal del SDK de Mosend. Instancia con tu API key (y opcionalmente
@@ -24,6 +32,22 @@ final class MosendClient
     public $messages;
     /** @var ConversationsResource */
     public $conversations;
+    /** @var ContactsResource */
+    public $contacts;
+    /** @var ContactListsResource */
+    public $contactLists;
+    /** @var TagsResource */
+    public $tags;
+    /** @var OptInsResource */
+    public $optIns;
+    /** @var QuickRepliesResource */
+    public $quickReplies;
+    /** @var ReactionsResource */
+    public $reactions;
+    /** @var TemplatesResource */
+    public $templates;
+    /** @var BroadcastsResource */
+    public $broadcasts;
 
     /** @var HttpClient */
     private $http;
@@ -53,6 +77,14 @@ final class MosendClient
         $this->health = new HealthResource($this->http, $orgId);
         $this->messages = new MessagesResource($this->http, $orgId);
         $this->conversations = new ConversationsResource($this->http, $orgId);
+        $this->contacts = new ContactsResource($this->http, $orgId);
+        $this->contactLists = new ContactListsResource($this->http, $orgId);
+        $this->tags = new TagsResource($this->http, $orgId);
+        $this->optIns = new OptInsResource($this->http, $orgId);
+        $this->quickReplies = new QuickRepliesResource($this->http, $orgId);
+        $this->reactions = new ReactionsResource($this->http, $orgId);
+        $this->templates = new TemplatesResource($this->http, $orgId);
+        $this->broadcasts = new BroadcastsResource($this->http, $orgId);
     }
 
     public function setApiKey(?string $key): void

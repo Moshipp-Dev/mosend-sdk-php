@@ -14,7 +14,7 @@ use Mosend\Exception\MosendValidationException;
  * (API key vs Bearer JWT), desempaqueta el envelope `{ data }`, mapea los
  * errores a excepciones tipadas y soporta reintentos opt-in e idempotencia.
  */
-final class HttpClient
+class HttpClient
 {
     /** @var string */
     private $baseUrl;
@@ -120,7 +120,7 @@ final class HttpClient
      * @param array<string,mixed> $opts
      * @return array{0:int,1:string,2:array<string,string>}
      */
-    private function execute(string $method, string $url, array $opts, bool $isMultipart): array
+    protected function execute(string $method, string $url, array $opts, bool $isMultipart): array
     {
         $ch = curl_init();
         $headers = $this->buildHeaders($opts, $isMultipart);
