@@ -42,7 +42,7 @@ final class HttpClient
         $this->apiKey = isset($config['apiKey']) ? (string) $config['apiKey'] : null;
         $this->accessToken = isset($config['accessToken']) ? (string) $config['accessToken'] : null;
         $this->timeoutMs = (int) ($config['timeoutMs'] ?? 30000);
-        $this->userAgent = (string) ($config['userAgent'] ?? 'moshipp-mosend-sdk-php/0.1.0');
+        $this->userAgent = (string) ($config['userAgent'] ?? 'moshipp-mosend-sdk-php/1.0.0');
         $this->defaultHeaders = $config['defaultHeaders'] ?? [];
         $this->retries = $config['retries'] ?? null;
 
