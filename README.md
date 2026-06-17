@@ -6,7 +6,7 @@
 - **PHP 7.4+**.
 - Auth automática (API key `X-Api-Key` o Bearer JWT), errores tipados, paginación por cursor y verificación de webhooks HMAC.
 
-> ⚠️ **Estado: en construcción por fases.** La Fase 0 (núcleo + `health`, `messages`, `conversations`) está lista; el resto de los resources se agregan en fases siguientes con verificación 1:1 contra el OpenAPI del backend.
+**Cobertura completa**: los 57 resources de la API (mismo mapa que el SDK de TypeScript, verificado 1:1 contra el OpenAPI del backend). Pendiente solo la publicación a Packagist (próxima fase).
 
 ## Instalación
 
