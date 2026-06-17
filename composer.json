@@ -1,0 +1,33 @@
+{
+  "name": "moshipp/mosend-sdk",
+  "description": "SDK oficial de PHP para la API de Mosend (WhatsApp Business, Web Chat, Bot, Billing, Webhooks).",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://developer.mosend.dev",
+  "authors": [
+    { "name": "Moshipp SAS", "homepage": "https://mosend.dev" }
+  ],
+  "keywords": ["mosend", "whatsapp", "whatsapp-business", "messaging", "sdk", "api"],
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  },
+  "autoload": {
+    "psr-4": { "Mosend\\": "src/" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Mosend\\Tests\\": "tests/" }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "find src tests -name '*.php' -print0 | xargs -0 -n1 -P4 php -l"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable"
+}
