@@ -8,6 +8,7 @@ use Mosend\Http\HttpClient;
 use Mosend\Resources\AddonsResource;
 use Mosend\Resources\AiCreditsResource;
 use Mosend\Resources\ApiKeysResource;
+use Mosend\Resources\AttendanceResource;
 use Mosend\Resources\AuditResource;
 use Mosend\Resources\AuthResource;
 use Mosend\Resources\AutoRepliesResource;
@@ -19,6 +20,7 @@ use Mosend\Resources\ContactListsResource;
 use Mosend\Resources\ContactsResource;
 use Mosend\Resources\ConversationsResource;
 use Mosend\Resources\CreditNotesResource;
+use Mosend\Resources\DocumentsResource;
 use Mosend\Resources\FlowsResource;
 use Mosend\Resources\HealthResource;
 use Mosend\Resources\IntegrationsResource;
@@ -26,6 +28,7 @@ use Mosend\Resources\InvitationsResource;
 use Mosend\Resources\InvoicesResource;
 use Mosend\Resources\KnowledgeResource;
 use Mosend\Resources\LeadsResource;
+use Mosend\Resources\LinkPagesResource;
 use Mosend\Resources\MediaResource;
 use Mosend\Resources\MembershipsResource;
 use Mosend\Resources\MercadoPagoResource;
@@ -47,7 +50,12 @@ use Mosend\Resources\QuickRepliesResource;
 use Mosend\Resources\ReactionsResource;
 use Mosend\Resources\ReportsResource;
 use Mosend\Resources\RolesResource;
+use Mosend\Resources\ScheduleResource;
+use Mosend\Resources\ShiftRemindersResource;
+use Mosend\Resources\SolutionsResource;
 use Mosend\Resources\StickersResource;
+use Mosend\Resources\StoreConnectionsResource;
+use Mosend\Resources\StoreTemplatesResource;
 use Mosend\Resources\SystemNoticesResource;
 use Mosend\Resources\TagsResource;
 use Mosend\Resources\TasksResource;
@@ -78,6 +86,8 @@ final class MosendClient
     public $aiCredits;
     /** @var ApiKeysResource */
     public $apiKeys;
+    /** @var AttendanceResource */
+    public $attendance;
     /** @var AuditResource */
     public $audit;
     /** @var AuthResource */
@@ -100,6 +110,8 @@ final class MosendClient
     public $conversations;
     /** @var CreditNotesResource */
     public $creditNotes;
+    /** @var DocumentsResource */
+    public $documents;
     /** @var FlowsResource */
     public $flows;
     /** @var HealthResource */
@@ -114,6 +126,8 @@ final class MosendClient
     public $knowledge;
     /** @var LeadsResource */
     public $leads;
+    /** @var LinkPagesResource */
+    public $linkPages;
     /** @var MediaResource */
     public $media;
     /** @var MembershipsResource */
@@ -156,8 +170,18 @@ final class MosendClient
     public $reports;
     /** @var RolesResource */
     public $roles;
+    /** @var ScheduleResource */
+    public $schedule;
+    /** @var ShiftRemindersResource */
+    public $shiftReminders;
+    /** @var SolutionsResource */
+    public $solutions;
     /** @var StickersResource */
     public $stickers;
+    /** @var StoreConnectionsResource */
+    public $storeConnections;
+    /** @var StoreTemplatesResource */
+    public $storeTemplates;
     /** @var SystemNoticesResource */
     public $systemNotices;
     /** @var TagsResource */
@@ -198,7 +222,7 @@ final class MosendClient
         $httpConfig = [
             'baseUrl' => $config['baseUrl'] ?? 'https://api.mosend.dev',
             'timeoutMs' => $config['timeout'] ?? 30000,
-            'userAgent' => $config['userAgent'] ?? 'moshipp-mosend-sdk-php/1.0.0',
+            'userAgent' => $config['userAgent'] ?? 'moshipp-mosend-sdk-php/1.1.0',
             'defaultHeaders' => $config['defaultHeaders'] ?? [],
             'retries' => $config['retries'] ?? null,
         ];
@@ -215,6 +239,7 @@ final class MosendClient
         $this->addons = new AddonsResource($this->http, $orgId);
         $this->aiCredits = new AiCreditsResource($this->http, $orgId);
         $this->apiKeys = new ApiKeysResource($this->http, $orgId);
+        $this->attendance = new AttendanceResource($this->http, $orgId);
         $this->audit = new AuditResource($this->http, $orgId);
         $this->auth = new AuthResource($this->http, $orgId);
         $this->autoReplies = new AutoRepliesResource($this->http, $orgId);
@@ -226,6 +251,7 @@ final class MosendClient
         $this->contacts = new ContactsResource($this->http, $orgId);
         $this->conversations = new ConversationsResource($this->http, $orgId);
         $this->creditNotes = new CreditNotesResource($this->http, $orgId);
+        $this->documents = new DocumentsResource($this->http, $orgId);
         $this->flows = new FlowsResource($this->http, $orgId);
         $this->health = new HealthResource($this->http, $orgId);
         $this->integrations = new IntegrationsResource($this->http, $orgId);
@@ -233,6 +259,7 @@ final class MosendClient
         $this->invoices = new InvoicesResource($this->http, $orgId);
         $this->knowledge = new KnowledgeResource($this->http, $orgId);
         $this->leads = new LeadsResource($this->http, $orgId);
+        $this->linkPages = new LinkPagesResource($this->http, $orgId);
         $this->media = new MediaResource($this->http, $orgId);
         $this->memberships = new MembershipsResource($this->http, $orgId);
         $this->mercadoPago = new MercadoPagoResource($this->http, $orgId);
@@ -254,7 +281,12 @@ final class MosendClient
         $this->reactions = new ReactionsResource($this->http, $orgId);
         $this->reports = new ReportsResource($this->http, $orgId);
         $this->roles = new RolesResource($this->http, $orgId);
+        $this->schedule = new ScheduleResource($this->http, $orgId);
+        $this->shiftReminders = new ShiftRemindersResource($this->http, $orgId);
+        $this->solutions = new SolutionsResource($this->http, $orgId);
         $this->stickers = new StickersResource($this->http, $orgId);
+        $this->storeConnections = new StoreConnectionsResource($this->http, $orgId);
+        $this->storeTemplates = new StoreTemplatesResource($this->http, $orgId);
         $this->systemNotices = new SystemNoticesResource($this->http, $orgId);
         $this->tags = new TagsResource($this->http, $orgId);
         $this->tasks = new TasksResource($this->http, $orgId);

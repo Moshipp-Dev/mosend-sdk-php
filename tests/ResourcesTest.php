@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Mosend\Tests;
 
+use Mosend\Resources\AttendanceResource;
 use Mosend\Resources\BroadcastsResource;
 use Mosend\Resources\ContactListsResource;
 use Mosend\Resources\ContactsResource;
+use Mosend\Resources\DocumentsResource;
+use Mosend\Resources\LinkPagesResource;
 use Mosend\Resources\MessagesResource;
 use Mosend\Resources\OptInsResource;
 use Mosend\Resources\QuickRepliesResource;
 use Mosend\Resources\ReactionsResource;
+use Mosend\Resources\ScheduleResource;
+use Mosend\Resources\ShiftRemindersResource;
+use Mosend\Resources\SolutionsResource;
+use Mosend\Resources\StoreConnectionsResource;
+use Mosend\Resources\StoreTemplatesResource;
 use Mosend\Resources\TagsResource;
 use Mosend\Resources\TemplatesResource;
 use Mosend\Tests\Support\RecordingHttpClient;
@@ -144,5 +152,126 @@ final class ResourcesTest extends TestCase
         $res->recipients('b1', ['filter' => 'failed']);
         self::assertSame('/organizations/org-1/broadcasts/b1/recipients', $this->path($r));
         self::assertStringContainsString('filter=failed', $r->lastCall()['url']);
+    }
+
+    public function testDocumentsUploadMultipartWithFolderQuery(): void
+    {
+        $r = $this->rec();
+        $res = new DocumentsResource($r, self::ORG);
+        $res->upload('/tmp/x.pdf', ['folderId' => 'f1', 'name' => 'Factura', 'visibility' => 'ORG']);
+        self::assertTrue($r->lastCall()['multipart']);
+        self::assertSame('/organizations/org-1/documents', $this->path($r));
+        self::assertStringContainsString('folderId=f1', $r->lastCall()['url']);
+        self::assertSame('Factura', $r->lastCall()['opts']['multipart']['name']);
+
+        $res->send('d1', ['conversationId' => 'c1', 'caption' => 'Hola']);
+        self::assertSame('POST', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/documents/d1/send', $this->path($r));
+        self::assertSame('c1', $r->lastBody()['conversationId']);
+
+        $res->purge('d1');
+        self::assertSame('DELETE', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/documents/d1/purge', $this->path($r));
+    }
+
+    public function testLinkPagesReorderAndItems(): void
+    {
+        $r = $this->rec();
+        $res = new LinkPagesResource($r, self::ORG);
+        $res->create(['handle' => 'mi_bio', 'displayName' => 'Mi Bio']);
+        self::assertSame('/organizations/org-1/link-pages', $this->path($r));
+        self::assertSame('mi_bio', $r->lastBody()['handle']);
+
+        $res->reorderItems('lp1', ['i2', 'i1']);
+        self::assertSame('PATCH', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/link-pages/lp1/items/reorder', $this->path($r));
+        self::assertSame(['i2', 'i1'], $r->lastBody()['itemIds']);
+
+        $res->archive('lp1');
+        self::assertSame('DELETE', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/link-pages/lp1', $this->path($r));
+    }
+
+    public function testSolutionsCatalogAndInstall(): void
+    {
+        $r = $this->rec();
+        $res = new SolutionsResource($r, self::ORG);
+        $res->list();
+        self::assertSame('/solutions', $this->path($r));
+
+        $res->install('clinica', ['wabaId' => 'w1']);
+        self::assertSame('POST', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/solutions/clinica/install', $this->path($r));
+        self::assertSame('w1', $r->lastBody()['wabaId']);
+    }
+
+    public function testShiftRemindersUsesPut(): void
+    {
+        $r = $this->rec();
+        (new ShiftRemindersResource($r, self::ORG))->update(['enabled' => true, 'shiftStartLeadMin' => 10]);
+        self::assertSame('PUT', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/shift-reminders', $this->path($r));
+        self::assertTrue($r->lastBody()['enabled']);
+    }
+
+    public function testStoreConnectionsMappingsAndEvents(): void
+    {
+        $r = $this->rec();
+        $res = new StoreConnectionsResource($r, self::ORG);
+        $res->upsertMapping('sc1', ['eventType' => 'ORDER_CREATED', 'templateId' => 't1']);
+        self::assertSame('POST', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/store-connections/sc1/mappings', $this->path($r));
+        self::assertSame('ORDER_CREATED', $r->lastBody()['eventType']);
+
+        $res->listEvents('sc1', ['limit' => 25]);
+        self::assertSame('GET', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/store-connections/sc1/events', $this->path($r));
+        self::assertStringContainsString('limit=25', $r->lastCall()['url']);
+    }
+
+    public function testStoreTemplatesInstallAndStatus(): void
+    {
+        $r = $this->rec();
+        $res = new StoreTemplatesResource($r, self::ORG);
+        $res->status(['wabaId' => 'w1']);
+        self::assertSame('/organizations/org-1/store-templates/status', $this->path($r));
+        self::assertStringContainsString('wabaId=w1', $r->lastCall()['url']);
+
+        $res->install(['catalogKey' => 'order_shipped', 'wabaId' => 'w1']);
+        self::assertSame('POST', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/store-templates/install', $this->path($r));
+        self::assertSame('order_shipped', $r->lastBody()['catalogKey']);
+    }
+
+    public function testAttendanceStartAndChangeStatus(): void
+    {
+        $r = $this->rec();
+        $res = new AttendanceResource($r, self::ORG);
+        $res->start();
+        self::assertSame('POST', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/attendance/start', $this->path($r));
+
+        $res->changeStatus(['status' => 'LUNCH']);
+        self::assertSame('/organizations/org-1/attendance/status', $this->path($r));
+        self::assertSame('LUNCH', $r->lastBody()['status']);
+
+        $res->setOvertime('a1', ['enabled' => true]);
+        self::assertSame('/organizations/org-1/attendance/overtime/a1', $this->path($r));
+        self::assertTrue($r->lastBody()['enabled']);
+    }
+
+    public function testScheduleUpsertUsesPut(): void
+    {
+        $r = $this->rec();
+        $res = new ScheduleResource($r, self::ORG);
+        $res->upsert('a1', ['isoYear' => 2026, 'isoWeek' => 26, 'days' => ['mon' => ['09:00-18:00']]]);
+        self::assertSame('PUT', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/attendance/schedules/a1', $this->path($r));
+        self::assertSame(2026, $r->lastBody()['isoYear']);
+
+        $res->mySchedule(['isoWeek' => 26]);
+        self::assertSame('GET', $r->lastCall()['method']);
+        self::assertSame('/organizations/org-1/attendance/my-schedule', $this->path($r));
+        self::assertStringContainsString('isoWeek=26', $r->lastCall()['url']);
     }
 }

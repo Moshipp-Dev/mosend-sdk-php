@@ -24,6 +24,14 @@ final class ClientTest extends TestCase
         self::assertInstanceOf(\Mosend\Resources\MessagesResource::class, $mosend->messages);
         self::assertInstanceOf(\Mosend\Resources\ConversationsResource::class, $mosend->conversations);
         self::assertInstanceOf(\Mosend\Resources\HealthResource::class, $mosend->health);
+        self::assertInstanceOf(\Mosend\Resources\DocumentsResource::class, $mosend->documents);
+        self::assertInstanceOf(\Mosend\Resources\LinkPagesResource::class, $mosend->linkPages);
+        self::assertInstanceOf(\Mosend\Resources\SolutionsResource::class, $mosend->solutions);
+        self::assertInstanceOf(\Mosend\Resources\ShiftRemindersResource::class, $mosend->shiftReminders);
+        self::assertInstanceOf(\Mosend\Resources\StoreConnectionsResource::class, $mosend->storeConnections);
+        self::assertInstanceOf(\Mosend\Resources\StoreTemplatesResource::class, $mosend->storeTemplates);
+        self::assertInstanceOf(\Mosend\Resources\AttendanceResource::class, $mosend->attendance);
+        self::assertInstanceOf(\Mosend\Resources\ScheduleResource::class, $mosend->schedule);
     }
 
     public function testPaginatorNormalizesEnvelope(): void
