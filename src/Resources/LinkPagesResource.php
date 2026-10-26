@@ -119,4 +119,32 @@ final class LinkPagesResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         return $this->http->request('DELETE', "/organizations/{$orgId}/link-pages/{$id}/items/{$itemId}");
     }
+
+    // ── Público (sin auth) ──
+
+    /** Perfil público de una página publicada (lo que pinta mosend.link/<handle>). @return mixed */
+    public function publicProfile(string $handle)
+    {
+        return $this->http->request('GET', '/link-pages/p/' . rawurlencode($handle), ['skipAuth' => true]);
+    }
+
+    /**
+     * Ruta (relativa a la URL base de la API) de la portada o el avatar públicos.
+     * Responden la imagen, no JSON: úsala en un `<img src>`.
+     *
+     * @param string $slot 'cover'|'avatar'
+     */
+    public function publicImagePath(string $handle, string $slot): string
+    {
+        return '/link-pages/p/' . rawurlencode($handle) . '/' . $slot;
+    }
+
+    /**
+     * Ruta (relativa a la URL base de la API) que registra el clic de un enlace y
+     * redirige (302) a su destino. Úsala como `href`.
+     */
+    public function publicItemPath(string $handle, string $itemId): string
+    {
+        return '/link-pages/p/' . rawurlencode($handle) . '/go/' . $itemId;
+    }
 }

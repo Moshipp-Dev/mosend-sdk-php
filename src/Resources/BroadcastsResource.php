@@ -51,4 +51,11 @@ final class BroadcastsResource extends Resource
         unset($query['orgId']);
         return $this->http->request('GET', "/organizations/{$orgId}/broadcasts/{$broadcastId}/recipients", ['query' => $query]);
     }
+
+    /** Reintenta los destinatarios que fallaron en una difusión ya enviada. @return mixed */
+    public function retryFailed(string $broadcastId, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/broadcasts/{$broadcastId}/retry-failed");
+    }
 }

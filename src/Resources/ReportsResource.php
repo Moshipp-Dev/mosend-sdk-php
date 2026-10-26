@@ -74,4 +74,54 @@ final class ReportsResource extends Resource
         unset($input['orgId']);
         return $this->http->request('PATCH', "/organizations/{$orgId}/reports/team/goals", ['body' => $input]);
     }
+
+    /**
+     * Canales conectados (WhatsApp, Instagram, Web Chat), para onboarding y estados vacíos.
+     *
+     * @return mixed
+     */
+    public function channelsSummary(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/reports/channels-summary");
+    }
+
+    /**
+     * Portada del panel: qué espera ahora y cómo va la atención por día, contra el período anterior.
+     *
+     * @param array<string,mixed> $query dias?, desde?, hasta?, orgId?
+     * @return mixed
+     */
+    public function portada(array $query = [])
+    {
+        $orgId = $this->requireOrgId($query['orgId'] ?? null);
+        unset($query['orgId']);
+        return $this->http->request('GET', "/organizations/{$orgId}/reports/portada", ['query' => $query]);
+    }
+
+    /**
+     * Serie del equipo por día/semana/mes, con comparación, canal y SLA.
+     *
+     * @param array<string,mixed> $query from?, to?, granularity? (day|week|month), compare? (true|1), channel? (WHATSAPP|WEB|INSTAGRAM), orgId?
+     * @return mixed
+     */
+    public function teamSeries(array $query = [])
+    {
+        $orgId = $this->requireOrgId($query['orgId'] ?? null);
+        unset($query['orgId']);
+        return $this->http->request('GET', "/organizations/{$orgId}/reports/team/series", ['query' => $query]);
+    }
+
+    /**
+     * Reporte de ventas de licencias. Solo propietarios y administradores.
+     *
+     * @param array<string,mixed> $query desde?, hasta?, agrupar? (dia|semana|mes), moneda?, perfilId?, phoneNumberId?, agentId?, userId?, productId?, anuncioId?, orgId?
+     * @return mixed
+     */
+    public function ventas(array $query = [])
+    {
+        $orgId = $this->requireOrgId($query['orgId'] ?? null);
+        unset($query['orgId']);
+        return $this->http->request('GET', "/organizations/{$orgId}/reports/ventas", ['query' => $query]);
+    }
 }

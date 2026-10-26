@@ -90,4 +90,73 @@ final class AuthResource extends Resource
     {
         return $this->http->request('POST', '/auth/step-up/passkey/verify', ['body' => $input]);
     }
+
+    /**
+     * Sesiones activas del usuario (una por dispositivo), marcando la actual. Requiere sesión JWT del panel.
+     * @return mixed
+     */
+    public function listSessions()
+    {
+        return $this->http->request('GET', '/auth/me/sessions');
+    }
+
+    /**
+     * Cierra las demás sesiones del usuario y conserva la actual. Requiere sesión JWT del panel.
+     * @return mixed
+     */
+    public function closeOtherSessions()
+    {
+        return $this->http->request('DELETE', '/auth/me/sessions');
+    }
+
+    /**
+     * Cierra una sesión propia (revoca toda su cadena de refresh). Requiere sesión JWT del panel.
+     * @return mixed
+     */
+    public function closeSession(string $id)
+    {
+        return $this->http->request('DELETE', "/auth/me/sessions/{$id}");
+    }
+
+    /**
+     * Flags públicos del registro (verificación de teléfono / correo).
+     * @return mixed
+     */
+    public function signupConfig()
+    {
+        return $this->http->request('GET', '/auth/signup/config');
+    }
+
+    /**
+     * Registro con teléfono verificado, paso 1: envía el código OTP por WhatsApp.
+     *
+     * @param array<string,mixed> $input email, password, name, phone, captchaToken?
+     * @return mixed
+     */
+    public function signupRequestCode(array $input)
+    {
+        return $this->http->request('POST', '/auth/signup/request-code', ['body' => $input, 'skipAuth' => true]);
+    }
+
+    /**
+     * Reenvía el código OTP del registro pendiente.
+     *
+     * @param array<string,mixed> $input email, phone
+     * @return mixed
+     */
+    public function signupResendCode(array $input)
+    {
+        return $this->http->request('POST', '/auth/signup/resend-code', ['body' => $input, 'skipAuth' => true]);
+    }
+
+    /**
+     * Registro, paso 2: verifica el código, crea la cuenta y emite tokens.
+     *
+     * @param array<string,mixed> $input email, phone, code
+     * @return mixed
+     */
+    public function signupVerifyCode(array $input)
+    {
+        return $this->http->request('POST', '/auth/signup/verify-code', ['body' => $input, 'skipAuth' => true]);
+    }
 }

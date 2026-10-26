@@ -70,6 +70,33 @@ use Mosend\Resources\WebChatResource;
 use Mosend\Resources\WebChatPublicResource;
 use Mosend\Resources\WebhooksOutboundResource;
 use Mosend\Resources\WhatsappLinksResource;
+use Mosend\Resources\LicenseDeliveryResource;
+use Mosend\Resources\AgendaResource;
+use Mosend\Resources\SalesResource;
+use Mosend\Resources\QuotesResource;
+use Mosend\Resources\OrdersResource;
+use Mosend\Resources\CatalogsResource;
+use Mosend\Resources\NequiPaymentsResource;
+use Mosend\Resources\PaymentReportsResource;
+use Mosend\Resources\WompiResource;
+use Mosend\Resources\AccountDeletionResource;
+use Mosend\Resources\AdCampaignsResource;
+use Mosend\Resources\BotAgentsResource;
+use Mosend\Resources\BotImagesResource;
+use Mosend\Resources\BotServicesResource;
+use Mosend\Resources\BotSummaryResource;
+use Mosend\Resources\ConnectorsResource;
+use Mosend\Resources\DayOffResource;
+use Mosend\Resources\MessagingLimitResource;
+use Mosend\Resources\ConnectionTestResource;
+use Mosend\Resources\SurveysResource;
+use Mosend\Resources\WabaUsageResource;
+use Mosend\Resources\OAuthResource;
+use Mosend\Resources\WhatsappFlowsResource;
+use Mosend\Resources\WhatsappGroupsResource;
+use Mosend\Resources\CrmResource;
+use Mosend\Resources\DealsResource;
+use Mosend\Resources\SignupLinksResource;
 
 /**
  * Cliente principal del SDK de Mosend. Instancia con tu API key (y opcionalmente
@@ -211,6 +238,87 @@ final class MosendClient
     /** @var WhatsappLinksResource */
     public $whatsappLinks;
 
+    /** @var LicenseDeliveryResource */
+    public $licenseDelivery;
+
+    /** @var AgendaResource */
+    public $agenda;
+
+    /** @var SalesResource */
+    public $sales;
+
+    /** @var QuotesResource */
+    public $quotes;
+
+    /** @var OrdersResource */
+    public $orders;
+
+    /** @var CatalogsResource */
+    public $catalogs;
+
+    /** @var NequiPaymentsResource */
+    public $nequiPayments;
+
+    /** @var PaymentReportsResource */
+    public $paymentReports;
+
+    /** @var WompiResource */
+    public $wompi;
+
+    /** @var AccountDeletionResource */
+    public $accountDeletion;
+
+    /** @var AdCampaignsResource */
+    public $adCampaigns;
+
+    /** @var BotAgentsResource */
+    public $botAgents;
+
+    /** @var BotImagesResource */
+    public $botImages;
+
+    /** @var BotServicesResource */
+    public $botServices;
+
+    /** @var BotSummaryResource */
+    public $botSummary;
+
+    /** @var ConnectorsResource */
+    public $connectors;
+
+    /** @var DayOffResource */
+    public $dayOff;
+
+    /** @var MessagingLimitResource */
+    public $messagingLimit;
+
+    /** @var ConnectionTestResource */
+    public $connectionTest;
+
+    /** @var SurveysResource */
+    public $surveys;
+
+    /** @var WabaUsageResource */
+    public $wabaUsage;
+
+    /** @var OAuthResource */
+    public $oauth;
+
+    /** @var WhatsappFlowsResource */
+    public $whatsappFlows;
+
+    /** @var WhatsappGroupsResource */
+    public $whatsappGroups;
+
+    /** @var CrmResource */
+    public $crm;
+
+    /** @var DealsResource */
+    public $deals;
+
+    /** @var SignupLinksResource */
+    public $signupLinks;
+
     /** @var HttpClient */
     private $http;
 
@@ -301,6 +409,33 @@ final class MosendClient
         $this->webChatPublic = new WebChatPublicResource($this->http, $orgId);
         $this->webhooksOutbound = new WebhooksOutboundResource($this->http, $orgId);
         $this->whatsappLinks = new WhatsappLinksResource($this->http, $orgId);
+        $this->licenseDelivery = new LicenseDeliveryResource($this->http, $orgId);
+        $this->agenda = new AgendaResource($this->http, $orgId);
+        $this->sales = new SalesResource($this->http, $orgId);
+        $this->quotes = new QuotesResource($this->http, $orgId);
+        $this->orders = new OrdersResource($this->http, $orgId);
+        $this->catalogs = new CatalogsResource($this->http, $orgId);
+        $this->nequiPayments = new NequiPaymentsResource($this->http, $orgId);
+        $this->paymentReports = new PaymentReportsResource($this->http, $orgId);
+        $this->wompi = new WompiResource($this->http, $orgId);
+        $this->accountDeletion = new AccountDeletionResource($this->http, $orgId);
+        $this->adCampaigns = new AdCampaignsResource($this->http, $orgId);
+        $this->botAgents = new BotAgentsResource($this->http, $orgId);
+        $this->botImages = new BotImagesResource($this->http, $orgId);
+        $this->botServices = new BotServicesResource($this->http, $orgId);
+        $this->botSummary = new BotSummaryResource($this->http, $orgId);
+        $this->connectors = new ConnectorsResource($this->http, $orgId);
+        $this->dayOff = new DayOffResource($this->http, $orgId);
+        $this->messagingLimit = new MessagingLimitResource($this->http, $orgId);
+        $this->connectionTest = new ConnectionTestResource($this->http, $orgId);
+        $this->surveys = new SurveysResource($this->http, $orgId);
+        $this->wabaUsage = new WabaUsageResource($this->http, $orgId);
+        $this->oauth = new OAuthResource($this->http, $orgId);
+        $this->whatsappFlows = new WhatsappFlowsResource($this->http, $orgId);
+        $this->whatsappGroups = new WhatsappGroupsResource($this->http, $orgId);
+        $this->crm = new CrmResource($this->http, $orgId);
+        $this->deals = new DealsResource($this->http, $orgId);
+        $this->signupLinks = new SignupLinksResource($this->http, $orgId);
     }
 
     public function setApiKey(?string $key): void

@@ -72,4 +72,11 @@ final class FlowsResource extends Resource
         unset($input['orgId']);
         return $this->http->request('POST', "/organizations/{$orgId}/bot/flows/{$id}/test-run", ['body' => $input]);
     }
+
+    /** Plantillas de flujo listas para usar (catálogo fijo). @return mixed */
+    public function templates(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/bot/flows/plantillas");
+    }
 }

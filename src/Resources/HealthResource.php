@@ -19,9 +19,9 @@ final class HealthResource extends Resource
         return $this->http->request('GET', '/health/ready');
     }
 
-    /** @return mixed */
+    /** Ping raíz: status, nombre del servicio, versión y timestamp. @return mixed */
     public function status()
     {
-        return $this->http->request('GET', '/health/status');
+        return $this->http->request('GET', '/health');
     }
 }

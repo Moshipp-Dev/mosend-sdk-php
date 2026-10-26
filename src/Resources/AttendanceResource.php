@@ -133,4 +133,39 @@ final class AttendanceResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         return $this->http->request('DELETE', "/organizations/{$orgId}/attendance/sessions/{$sessionId}");
     }
+
+    /**
+     * Atajos de período (quincena, últimos 15/30, mes) en la TZ y forma de nómina de la org.
+     *
+     * @return mixed
+     */
+    public function periodPresets(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/attendance/period-presets");
+    }
+
+    /**
+     * Forma de trabajo de cada miembro: turno fijo o por horas (admin).
+     *
+     * @return mixed
+     */
+    public function listWorkModes(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/attendance/work-modes");
+    }
+
+    /**
+     * Cambia la forma de trabajo de una persona; recalcula también su histórico.
+     *
+     * @param array<string,mixed> $input workMode (FIXED|HOURLY), orgId?
+     * @return mixed
+     */
+    public function setWorkMode(string $agentId, array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/attendance/work-modes/{$agentId}", ['body' => $input]);
+    }
 }

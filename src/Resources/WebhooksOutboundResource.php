@@ -50,4 +50,15 @@ final class WebhooksOutboundResource extends Resource
         unset($query['orgId']);
         return $this->http->request('GET', "/organizations/{$orgId}/webhooks-outbound/{$id}/deliveries", ['query' => $query]);
     }
+
+    /**
+     * Envía un evento de prueba (webhook.test) para verificar que el endpoint lo recibe.
+     *
+     * @return mixed
+     */
+    public function sendTest(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/webhooks-outbound/{$id}/test");
+    }
 }

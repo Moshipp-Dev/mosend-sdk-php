@@ -64,4 +64,35 @@ final class TemplatesResource extends Resource
             'multipart' => ['file' => $file],
         ]);
     }
+
+    /** Crea la misma plantilla en otra cuenta de WhatsApp (WABA) de la org. @return mixed */
+    public function copy(string $templateId, string $wabaId, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/templates/{$templateId}/copiar", [
+            'body' => ['wabaId' => $wabaId],
+        ]);
+    }
+
+    /**
+     * Fija el archivo de cabecera predeterminado de la plantilla: se usa en cada
+     * envío que no traiga uno propio. Devuelve `{ headerMediaUrl, headerMediaMime, headerMediaName }`.
+     *
+     * @param string|\CURLFile $file
+     * @return mixed
+     */
+    public function setHeaderMedia(string $templateId, $file, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/templates/{$templateId}/header-media", [
+            'multipart' => ['file' => $file],
+        ]);
+    }
+
+    /** Quita el archivo de cabecera predeterminado. @return mixed */
+    public function clearHeaderMedia(string $templateId, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('DELETE', "/organizations/{$orgId}/templates/{$templateId}/header-media");
+    }
 }

@@ -48,4 +48,11 @@ final class WabaResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         $this->http->request('DELETE', "/organizations/{$orgId}/waba/{$id}/purge");
     }
+
+    /** Vuelve a suscribir la app a los webhooks de la WABA en Meta. @return mixed */
+    public function resubscribeWebhooks(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/waba/{$id}/webhooks/resubscribe");
+    }
 }

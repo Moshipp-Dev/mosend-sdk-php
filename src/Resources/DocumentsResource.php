@@ -7,6 +7,29 @@ namespace Mosend\Resources;
 /** `/organizations/{orgId}/documents` — repositorio de documentos y carpetas de la org. */
 final class DocumentsResource extends Resource
 {
+    // ─── Editor en línea ─────────────────────────────────────────────────────
+
+    /** Si el editor en línea (ONLYOFFICE) está disponible. @return mixed */
+    public function editorStatus(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/documents/editor/status");
+    }
+
+    /**
+     * Configuración para abrir el documento en el editor en línea.
+     *
+     * @param string $mode 'edit' (por defecto) o 'view' (solo lectura)
+     * @return mixed
+     */
+    public function editorConfig(string $docId, string $mode = 'edit', ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/documents/{$docId}/editor-config", [
+            'query' => ['mode' => $mode],
+        ]);
+    }
+
     // ─── Carpetas ────────────────────────────────────────────────────────────
 
     /** @return mixed */

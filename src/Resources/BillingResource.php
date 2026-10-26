@@ -43,4 +43,17 @@ final class BillingResource extends Resource
         unset($input['orgId']);
         return $this->http->request('POST', "/organizations/{$orgId}/billing/coupons/redeem", ['body' => $input]);
     }
+
+    /**
+     * Cambia el intervalo de facturación (MONTHLY|YEARLY). Aplica al próximo cierre; anual cobra el año desde esta fecha.
+     *
+     * @param array<string,mixed> $input interval, orgId?
+     * @return mixed
+     */
+    public function setInterval(array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/billing/interval", ['body' => $input]);
+    }
 }

@@ -69,7 +69,7 @@ class HttpClient
     /**
      * Ejecuta una request y devuelve `data` (envelope desempaquetado).
      *
-     * @param array<string,mixed> $opts query|body|multipart|headers|idempotencyKey|skipAuth
+     * @param array<string,mixed> $opts query|body|multipart|headers|idempotencyKey|skipAuth|raw
      * @return mixed
      */
     public function request(string $method, string $path, array $opts = [])
@@ -92,6 +92,13 @@ class HttpClient
             }
 
             $this->lastResponse = $this->readMeta($status, $headers);
+
+            // `raw`: rutas que no responden JSON (PDF, iCalendar, texto cifrado
+            // de Flows). Se devuelve el cuerpo tal cual; ante una redirección,
+            // la URL de destino (cURL no las sigue).
+            if (!empty($opts['raw']) && $status >= 200 && $status < 400) {
+                return $status >= 300 ? ($headers['location'] ?? '') : $rawBody;
+            }
 
             if ($status >= 200 && $status < 300) {
                 return $this->parseEnvelope($status, $rawBody);

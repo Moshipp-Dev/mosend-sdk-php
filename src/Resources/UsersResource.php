@@ -24,4 +24,24 @@ final class UsersResource extends Resource
     {
         $this->http->request('POST', '/users/me/change-password', ['body' => $input]);
     }
+
+    /**
+     * Envía un código OTP por WhatsApp para verificar el teléfono del usuario. Requiere sesión JWT.
+     * @return mixed
+     */
+    public function requestPhoneCode()
+    {
+        return $this->http->request('POST', '/users/me/phone/request-code');
+    }
+
+    /**
+     * Confirma el código OTP y marca el teléfono como verificado. Requiere sesión JWT.
+     *
+     * @param array<string,mixed> $input code
+     * @return mixed
+     */
+    public function verifyPhoneCode(array $input)
+    {
+        return $this->http->request('POST', '/users/me/phone/verify-code', ['body' => $input]);
+    }
 }

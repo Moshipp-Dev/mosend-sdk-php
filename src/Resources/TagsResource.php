@@ -27,4 +27,12 @@ final class TagsResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         $this->http->request('DELETE', "/organizations/{$orgId}/tags/{$tagId}");
     }
+
+    /** @param array<string,mixed> $input name?, color?, orgId? @return mixed */
+    public function update(string $tagId, array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/tags/{$tagId}", ['body' => $input]);
+    }
 }

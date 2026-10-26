@@ -42,4 +42,30 @@ final class MembershipsResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         $this->http->request('DELETE', "/organizations/{$orgId}/memberships/{$id}");
     }
+
+    /**
+     * Preferencias de UI del usuario actual en la organización (merge superficial).
+     *
+     * @param array<string,mixed> $input contactPanelDefaultTab? (info|notes|tasks|gallery), orgId?
+     * @return mixed
+     */
+    public function updateMyPreferences(array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/memberships/me/preferences", ['body' => $input]);
+    }
+
+    /**
+     * Suspende o reactiva el acceso de un miembro sin eliminarlo.
+     *
+     * @param array<string,mixed> $input suspended, reason?, orgId?
+     * @return mixed
+     */
+    public function setSuspension(string $id, array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/memberships/{$id}/suspension", ['body' => $input]);
+    }
 }

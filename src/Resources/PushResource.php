@@ -48,4 +48,26 @@ final class PushResource extends Resource
     {
         return $this->http->request('POST', '/push/test');
     }
+
+    /**
+     * Registra el token de push nativo del dispositivo (FCM en Android / APNs en iOS). Lo usa la app móvil.
+     *
+     * @param array<string,mixed> $input token, platform (IOS|ANDROID), appVersion?
+     * @return mixed
+     */
+    public function registerDevice(array $input)
+    {
+        return $this->http->request('POST', '/push/device', ['body' => $input]);
+    }
+
+    /**
+     * Da de baja un token de push nativo (logout en el dispositivo).
+     *
+     * @param array<string,mixed> $input token
+     * @return mixed
+     */
+    public function unregisterDevice(array $input)
+    {
+        return $this->http->request('DELETE', '/push/device', ['body' => $input]);
+    }
 }

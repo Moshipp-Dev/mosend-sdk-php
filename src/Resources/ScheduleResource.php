@@ -50,4 +50,17 @@ final class ScheduleResource extends Resource
         unset($query['orgId']);
         return $this->http->request('GET', "/organizations/{$orgId}/attendance/my-schedule", ['query' => $query]);
     }
+
+    /**
+     * Horario del agente autenticado día por día. semana (0 actual, 1 próxima, -1 anterior) o dias desde hoy (14 por defecto, máx. 42).
+     *
+     * @param array<string,mixed> $query dias?, semana?, orgId?
+     * @return mixed
+     */
+    public function myUpcoming(array $query = [])
+    {
+        $orgId = $this->requireOrgId($query['orgId'] ?? null);
+        unset($query['orgId']);
+        return $this->http->request('GET', "/organizations/{$orgId}/attendance/my-schedule/proximos", ['query' => $query]);
+    }
 }

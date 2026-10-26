@@ -75,4 +75,25 @@ final class WebChatResource extends Resource
             'multipart' => ['file' => $file],
         ]);
     }
+
+    /**
+     * Sube el avatar del canal (máx. 8 MB).
+     *
+     * @param string|\CURLFile $file
+     * @return mixed
+     */
+    public function uploadAvatar(string $id, $file, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/web-chat/channels/{$id}/avatar", [
+            'multipart' => ['file' => $file],
+        ]);
+    }
+
+    /** Quita el avatar del canal. @return mixed */
+    public function deleteAvatar(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('DELETE', "/organizations/{$orgId}/web-chat/channels/{$id}/avatar");
+    }
 }

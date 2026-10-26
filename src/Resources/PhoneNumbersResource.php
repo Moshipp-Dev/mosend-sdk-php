@@ -84,4 +84,76 @@ final class PhoneNumbersResource extends Resource
         $orgId = $this->requireOrgId($orgId);
         $this->http->request('POST', "/organizations/{$orgId}/phone-numbers/{$id}/registration/deregister");
     }
+
+    /**
+     * Cambia el color del número en el inbox (null = color automático). Paleta: emerald,
+     * sky, violet, amber, rose, indigo, teal, fuchsia, orange, lime, cyan, pink, slate.
+     *
+     * @return mixed
+     */
+    public function update(string $id, ?string $color, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('PATCH', "/organizations/{$orgId}/phone-numbers/{$id}", [
+            'body' => ['color' => $color],
+        ]);
+    }
+
+    /** Mensajes de servicio del mes por número, contra los 1.000 gratis de Meta. @return mixed */
+    public function serviceUsage(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/phone-numbers/service-usage");
+    }
+
+    /** Desconexiones y reconexiones del número, con su motivo. @return mixed */
+    public function connectionHistory(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/phone-numbers/{$id}/historial-de-conexion");
+    }
+
+    /** Qué deja de funcionar si se archiva el número. @return mixed */
+    public function archiveImpact(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('GET', "/organizations/{$orgId}/phone-numbers/{$id}/impacto-al-archivar");
+    }
+
+    /**
+     * Coexistencia: pide a Meta los contactos y el historial de la app WhatsApp Business
+     * (ventana de 24 h desde el registro, una sola vez).
+     *
+     * @return mixed
+     */
+    public function syncCoexistence(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/phone-numbers/{$id}/coexistence/sync");
+    }
+
+    /**
+     * Re-verifica el número contra Meta y sana la marca de desconexión si volvió a
+     * responder; si no, indica rehacer la conexión.
+     *
+     * @return mixed
+     */
+    public function reconnect(string $id, ?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/phone-numbers/{$id}/reconnect");
+    }
+
+    /**
+     * Fija el username de negocio del número (letras, números, punto y guion bajo; 3-30).
+     *
+     * @param array<string,mixed> $input username, transferAction? ('none'|'force_transfer'), orgId?
+     * @return mixed
+     */
+    public function setUsername(string $id, array $input)
+    {
+        $orgId = $this->requireOrgId($input['orgId'] ?? null);
+        unset($input['orgId']);
+        return $this->http->request('POST', "/organizations/{$orgId}/phone-numbers/{$id}/username", ['body' => $input]);
+    }
 }

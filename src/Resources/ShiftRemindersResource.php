@@ -28,4 +28,15 @@ final class ShiftRemindersResource extends Resource
         unset($input['orgId']);
         return $this->http->request('PUT', "/organizations/{$orgId}/shift-reminders", ['body' => $input]);
     }
+
+    /**
+     * Envía un recordatorio de jornada de PRUEBA al usuario actual por los canales habilitados.
+     *
+     * @return mixed
+     */
+    public function test(?string $orgId = null)
+    {
+        $orgId = $this->requireOrgId($orgId);
+        return $this->http->request('POST', "/organizations/{$orgId}/shift-reminders/test");
+    }
 }
