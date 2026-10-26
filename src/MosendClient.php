@@ -330,7 +330,7 @@ final class MosendClient
         $httpConfig = [
             'baseUrl' => $config['baseUrl'] ?? 'https://api.mosend.dev',
             'timeoutMs' => $config['timeout'] ?? 30000,
-            'userAgent' => $config['userAgent'] ?? 'moshipp-mosend-sdk-php/1.1.0',
+            'userAgent' => $config['userAgent'] ?? 'moshipp-mosend-sdk-php/1.2.0',
             'defaultHeaders' => $config['defaultHeaders'] ?? [],
             'retries' => $config['retries'] ?? null,
         ];
